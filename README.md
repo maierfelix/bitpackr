@@ -20,37 +20,43 @@ Browser installation:
 ````ts
 import * as bitpackr from "bitpackr";
 
-// Define layout
-const layout = new bitpackr.PacketLayout([
-  {name: "id", bitLength: 4},
-  {name: "color", bitLength: 32, bitStride: 8},
+// Define data layout
+const PLAYER_PACKET = new bitpackr.Layout([
+  {name: "id",     bitLength: 4},
+  {name: "color",  bitLength: 32, bitStride: 8},
   {name: "health", bitLength: 8},
+  {name: "dead",   bitLength: 1},
 ]);
 
 // The data to encode
 const input = [
   // Packet id
-  0,
-  // RGBA Color
-  255, 0, 255, 255,
+  15,
+  // Color
+  128, 0, 128, 255,
   // Health
-  255
+  66,
+  // Dead
+  1
 ];
-// Encode data into an Uint8Array
-const encoded = layout.encode(input);
 
-// Decode encoded data
-const decodedBits = bitpackr.PacketLayout.getPacketBits(encoded);
-// Read decoded data
-const decoded = [
-  // Read packet id
-  layout.decode("id", decodedBits),
-  // Read color
-  layout.decode("color", decodedBits, 0),
-  layout.decode("color", decodedBits, 1),
-  layout.decode("color", decodedBits, 2),
-  layout.decode("color", decodedBits, 3),
-  // Read health
-  layout.decode("health", decodedBits),
+// Encode data
+const encoded = PLAYER_PACKET.encode(input);
+// Decode data
+const decoded = bitpackr.Layout.getPacketBits(encoded);
+
+// The decoded data
+const output = [
+  // Packet id
+  PLAYER_PACKET.decode("id", decoded),
+  // Color
+  PLAYER_PACKET.decode("color", decoded, 0),
+  PLAYER_PACKET.decode("color", decoded, 1),
+  PLAYER_PACKET.decode("color", decoded, 2),
+  PLAYER_PACKET.decode("color", decoded, 3),
+  // Health
+  PLAYER_PACKET.decode("health", decoded),
+  // Dead
+  PLAYER_PACKET.decode("dead", decoded),
 ];
 ````
