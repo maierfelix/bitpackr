@@ -29,7 +29,6 @@
   ],
   "author": "Felix Maier",
   "license": "MIT",
-  "dependencies": {},
   "description": "An efficient low-level packet serializer, down to bit-level",
   "directories": {
     "doc": "docs"
