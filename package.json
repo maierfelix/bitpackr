@@ -1,0 +1,45 @@
+{
+  "name": "bitpackr",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "docs": "typedoc src/index.ts",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "rollup": "^2.56.3",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.0",
+    "typedoc": "^0.21.2",
+    "typescript": "^4.3.5"
+  },
+  "keywords": [
+    "low-level",
+    "bit",
+    "serialize"
+  ],
+  "author": "Felix Maier",
+  "license": "MIT",
+  "dependencies": {},
+  "description": "An efficient low-level packet serializer, down to bit-level",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maierfelix/bitpackr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maierfelix/bitpackr/issues"
+  },
+  "homepage": "https://github.com/maierfelix/bitpackr#readme"
+}
