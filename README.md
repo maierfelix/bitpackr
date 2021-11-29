@@ -18,7 +18,7 @@ Browser installation:
 ### Example:
 
 ````ts
-import * as bitpackr from "bitpackr;
+import * as bitpackr from "bitpackr";
 
 // Define layout
 const layout = new bitpackr.PacketLayout([
