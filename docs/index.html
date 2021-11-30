@@ -61,7 +61,7 @@
 				<a href="#bitpackr" id="bitpackr" style="color: inherit; text-decoration: none;">
 					<h1>bitpackr</h1>
 				</a>
-				<p>An efficient low-level packet serializer, down to bit-level</p>
+				<p>An efficient low-level packet serializer, down to bit-level.</p>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h3>Documentation:</h3>
 				</a>
@@ -75,6 +75,15 @@
 				<p>Browser installation:</p>
 				<pre><code class="language-html"><span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;https://unpkg.com/bitpackr/dist/index.iife.min.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
 </code></pre>
+				<a href="#general" id="general" style="color: inherit; text-decoration: none;">
+					<h3>General:</h3>
+				</a>
+				<p>This library doesn&#39;t validate encoded/decoded data and avoids throwing errors at you:</p>
+				<ul>
+					<li>If data is inconsistent, missing or has gaps, this library just fills it with zeros</li>
+					<li>If data exceeds it&#39;s bit range, it just overflows (i.e. starts again at zero)</li>
+				</ul>
+				<p>It is your own responsibility to validate the data.</p>
 				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
 					<h3>Example:</h3>
 				</a>

@@ -1,6 +1,6 @@
 # bitpackr
 
-An efficient low-level packet serializer, down to bit-level
+An efficient low-level packet serializer, down to bit-level.
 
 ### Documentation:
 The documentation is auto-generated and can be found [here](https://maierfelix.github.io/bitpackr/docs).
@@ -10,10 +10,18 @@ Package installation:
 ````
 npm install bitpackr
 ````
+
 Browser installation:
 ````html
 <script src="https://unpkg.com/bitpackr/dist/index.iife.min.js"></script>
 ````
+
+### General:
+This library doesn't validate encoded/decoded data and avoids throwing errors at you:
+ - If data is inconsistent, missing or has gaps, this library just fills it with zeros
+ - If data exceeds it's bit range, it just overflows (i.e. starts again at zero)
+
+It is your own responsibility to validate the data.
 
 ### Example:
 
