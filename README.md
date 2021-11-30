@@ -63,9 +63,9 @@ const output = [
 
 ### Steganography:
 
-By default, this library encodes data into an `Uint8Array` with `8-bit` per item. Instead of `8-bit`, a custom bit stride can be used. This allows you to encode your data into destinations, where you have less than `8-bit` per item available.
+By default, this library encodes data into an `Uint8Array` with `8-bit` per item. Instead of `8-bit`, a custom bit stride can be used. This allows you to encode your data into destinations, where you have less than `8-bit` available per item.
 
-One scenario where you have only `3-bit` available per item are transaction sums. This library allows you to hide information within a transaction sum:
+One scenario where you have only `3-bit` available are transaction sums. This library allows you to hide information within a transaction sum:
 
 ````ts
 import * as bitpackr from "bitpackr";
