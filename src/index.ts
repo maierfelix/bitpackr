@@ -1,63 +1,58 @@
 import {bitsToNumber, numberToBits, bitsNToBits, bitsToBitsN} from "./utils";
 
 /**
- * Represents a layout table entry
+ * Represents an internal packet table member
  */
-interface ILayoutTableEntry {
+interface IPacketTableMember {
   /**
-   * The name of the layout member
+   * Name of a packet table member
    */
   name: string;
   /**
-   * Calculated bit offset of a layout member
+   * Calculated bit offset of a packet table member
    */
   bitOffset: number;
   /**
-   * Bit length of a layout member
+   * Bit length of a packet table member
    */
   bitLength: number;
   /**
-   * Calculated bit range of a layout member
+   * Calculated bit range of a packet table member
    */
   bitRange: number;
   /**
-   * Element count of a layout member
+   * Element count of a packet table member
    */
   elementCount: number;
 }
 
 /**
- * Represents packet layout member
+ * Represents a packet layout member
  */
 export interface IPacketLayoutMember {
   /**
-   * The name of the packet member
+   * The name of the layout member
    */
   name: string;
   /**
-   * The bit length of the packet member
+   * The bit length of the layout member
    */
   bitLength: number;
   /**
-   * Optional element count
+   * Optional element count of the layout member
    */
   elementCount?: number;
 }
 
 /**
- * Packet layout alias
- */
-export type IPacketLayout = IPacketLayoutMember[];
-
-/**
- * Class representing a layout
+ * Packet layout class
  */
 export class Layout {
 
   /**
-   * Internal packet layout of the class
+   * Internal layout table
    */
-  private _table: Map<string, ILayoutTableEntry> = null;
+  private _table: Map<string, IPacketTableMember> = null;
 
   /**
    * The total bit length of the packet layout
@@ -68,9 +63,10 @@ export class Layout {
    * The constructor of this packet layout
    * @param layout - The packet layout to use
    */
-  public constructor(layout: IPacketLayout) {
-    const table = new Map<string, ILayoutTableEntry>();
+  public constructor(layout: IPacketLayoutMember[]) {
+    const table = new Map<string, IPacketTableMember>();
     let bitOffset = 0;
+    // Build internal layout table
     for (const member of layout) {
       const name = member.name;
       const bitLength = member.bitLength | 0;
@@ -84,16 +80,15 @@ export class Layout {
   }
 
   /**
-   * Encodes the provided packet data into
-   * @param packet - The packet to encode
+   * Encodes the provided packet data
+   * @param packet - The packet data to encode
    * @param bitStride - Optional custom bit stride to use
    */
   public encode(packet: number[], bitStride: number = 8): Uint8Array {
     const output = new Uint8Array(this._totalBitLength);
-
-    let elementOffset = 0;
+    // Encode layout members
     let bitOffset = 0;
-    // Encode packet members
+    let elementOffset = 0;
     for (const [_, {bitLength, bitRange, elementCount}] of this._table) {
       for (let ii = 0; ii < elementCount; ++ii) {
         // Overflow if OOB
@@ -104,38 +99,40 @@ export class Layout {
         elementOffset++;
       }
     }
-
     return bitsToBitsN(output, bitStride);
   }
 
   /**
-   * Decodes the packet member of the provided packet data
-   * @param name - The member name to query by
+   * Decodes the layout member of the provided packet data
+   * @param name - The name of the layout member to decode
    * @param bits - The packet bits to decode
    * @param elementIndex - Optional element index to start decoding at
    */
   public decode(name: string, bits: Uint8Array, elementIndex: number = 0): number {
-    const {bitOffset, bitLength, bitRange, elementCount} = this._table.get(name);
+    const table = this._table.get(name);
+    // Validate table member query
+    if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
     // Validate element index
-    if (elementIndex >= elementCount) {
-      throw new RangeError(`Element index '${elementIndex}' out of maximum range '${elementCount}'`);
-    }
-    const bitStrideOffset = elementIndex * (bitLength | 0);
-    // Decode packet member
-    const number = bitsToNumber(bits.subarray(bitOffset + bitStrideOffset), bitLength);
+    if (elementIndex >= table.elementCount) throw new RangeError(`Element index '${elementIndex}' out of range`);
+    // Decode layout member
+    const bitStrideOffset = elementIndex * (table.bitLength | 0);
+    const number = bitsToNumber(bits.subarray(table.bitOffset + bitStrideOffset), table.bitLength);
     // Overflow if OOB
-    return number & bitRange;
+    return number & table.bitRange;
   }
 
   /**
-   * Decodes the packet member elements of the provided packet data
-   * @param name - The member name to query by
+   * Decodes the layout member elements of the provided packet data
+   * @param name - The name of the layout member to decode
    * @param bits - The packet bits to decode
    */
   public decodeElements(name: string, bits: Uint8Array): number[] {
-    const {elementCount} = this._table.get(name);
+    const table = this._table.get(name);
+    // Validate table member query
+    if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
+    // Decode layout member elements
     const output: number[] = [];
-    for (let ii = 0; ii < elementCount; ++ii) {
+    for (let ii = 0; ii < table.elementCount; ++ii) {
       output.push(this.decode(name, bits, ii));
     }
     return output;
