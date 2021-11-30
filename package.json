@@ -1,12 +1,13 @@
 {
   "name": "bitpackr",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "docs": "typedoc src/index.ts",
     "build": "rollup -c",
-    "watch": "rollup -cw"
+    "watch": "rollup -cw",
+    "test": "node test/index.mjs"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",

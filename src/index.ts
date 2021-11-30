@@ -17,10 +17,6 @@ interface IPacketTableMember {
    */
   bitLength: number;
   /**
-   * Calculated bit range of a packet table member
-   */
-  bitRange: number;
-  /**
    * Element count of a packet table member
    */
   elementCount: number;
@@ -70,9 +66,8 @@ export class Layout {
     for (const member of layout) {
       const name = member.name;
       const bitLength = member.bitLength | 0;
-      const bitRange = ((2 ** bitLength) - 1);
       const elementCount = (member.elementCount | 0) || 1;
-      table.set(name, {name, bitOffset, bitLength, bitRange, elementCount});
+      table.set(name, {name, bitOffset, bitLength, elementCount});
       bitOffset += bitLength * elementCount;
     }
     this._table = table;
@@ -100,11 +95,10 @@ export class Layout {
     // Encode layout members
     let bitOffset = 0;
     let elementOffset = 0;
-    for (const [_, {bitLength, bitRange, elementCount}] of this._table) {
+    for (const [_, {bitLength, elementCount}] of this._table) {
       for (let ii = 0; ii < elementCount; ++ii) {
-        // Overflow if OOB
-        const data = packet[elementOffset] & bitRange;
-        const dataBits = numberToBits(data, bitLength).reverse();
+        const data = packet[elementOffset];
+        const dataBits = numberToBits(data, bitLength);
         output.set(dataBits, bitOffset);
         bitOffset += bitLength;
         elementOffset++;
@@ -127,9 +121,7 @@ export class Layout {
     if (elementIndex >= table.elementCount) throw new RangeError(`Element index '${elementIndex}' out of range`);
     // Decode layout member
     const bitStrideOffset = elementIndex * (table.bitLength | 0);
-    const number = bitsToNumber(bits.subarray(table.bitOffset + bitStrideOffset), table.bitLength);
-    // Overflow if OOB
-    return number & table.bitRange;
+    return bitsToNumber(bits.subarray(table.bitOffset + bitStrideOffset), table.bitLength);
   }
 
   /**
@@ -155,8 +147,35 @@ export class Layout {
    * @param bitStride - Optional custom bit stride to use
    */
   public static getPacketBits(data: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
-    const bits = bitsNToBits(data, bitStride);
-    return bits;
+    return bitsNToBits(data, bitStride);
+  }
+
+  /**
+   * Manually decodes the provided packet data
+   * @param bits - The packet bits to decode
+   * @param bitOffset - The bit offset to start decoding at
+   * @param bitLength - The bit length to decode with
+   * @param elementIndex - Optional element index to start decoding at
+   */
+  public static decodeAt(bits: Uint8Array, bitOffset: number, bitLength: number, elementIndex: number = 0): number {
+    const bitStrideOffset = elementIndex * (bitLength | 0);
+    return bitsToNumber(bits.subarray(bitOffset + bitStrideOffset), bitLength);
+  }
+
+  /**
+   * Manually decodes the layout member elements of the provided packet data
+   * @param bits - The packet bits to decode
+   * @param bitOffset - The bit offset to start decoding at
+   * @param bitLength - The bit length to decode with
+   * @param elementCount - The amount of elements to decode
+   */
+  public static decodeElementsAt(bits: Uint8Array, bitOffset: number, bitLength: number, elementCount: number): number[] {
+    // Decode layout member elements
+    const output: number[] = [];
+    for (let ii = 0; ii < elementCount; ++ii) {
+      output.push(Layout.decodeAt(bits, bitOffset, bitLength, ii));
+    }
+    return output;
   }
 
 }
