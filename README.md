@@ -17,11 +17,9 @@ Browser installation:
 ````
 
 ### General:
-This library doesn't validate encoded/decoded data and avoids throwing errors at you:
- - If data is inconsistent, missing or has gaps, this library just fills it with zeros
- - If data exceeds it's bit range, it just overflows (i.e. starts again at zero)
-
-It is your own responsibility to validate the data.
+This library doesn't validate encoded/decoded data. Instead of throwing errors to the user:
+ - If data is missing or has gaps, zeros get filled in
+ - If data exceeds it's bit range, it overflows
 
 ### Example:
 
