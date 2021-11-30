@@ -1,4 +1,4 @@
-import {bitsToNumber, numberToBits, bitsNToBits, bitsToBitsN} from "./utils";
+import {bitsToNumber, numberToBits, bitsNToBits, bitsToBitsN, DEFAULT_BIT_STRIDE} from "./utils";
 
 /**
  * Represents an internal packet table member
@@ -57,7 +57,7 @@ export class Layout {
   /**
    * The total bit length of the packet layout
    */
-  private _totalBitLength: number = 0;
+  private _bitLength: number = 0;
 
   /**
    * The constructor of this packet layout
@@ -76,16 +76,27 @@ export class Layout {
       bitOffset += bitLength * elementCount;
     }
     this._table = table;
-    this._totalBitLength = bitOffset;
+    this._bitLength = bitOffset;
   }
+
+  /**
+   * Returns the total bit length of the layout
+   */
+  public getBitLength(): number {return this._bitLength;}
+
+  /**
+   * Returns the total length of the layout
+   * @param bitStride - Optional custom bit stride to use
+   */
+  public getLength(bitStride: number = DEFAULT_BIT_STRIDE): number {return Math.ceil(this.getBitLength() / bitStride);}
 
   /**
    * Encodes the provided packet data
    * @param packet - The packet data to encode
    * @param bitStride - Optional custom bit stride to use
    */
-  public encode(packet: number[], bitStride: number = 8): Uint8Array {
-    const output = new Uint8Array(this._totalBitLength);
+  public encode(packet: number[], bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
+    const output = new Uint8Array(this.getBitLength());
     // Encode layout members
     let bitOffset = 0;
     let elementOffset = 0;
@@ -143,7 +154,7 @@ export class Layout {
    * @param data - The packet data to decode into bits
    * @param bitStride - Optional custom bit stride to use
    */
-  public static getPacketBits(data: Uint8Array, bitStride: number = 8): Uint8Array {
+  public static getPacketBits(data: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
     const bits = bitsNToBits(data, bitStride);
     return bits;
   }
