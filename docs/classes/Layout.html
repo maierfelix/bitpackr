@@ -93,19 +93,16 @@
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Layout.html#_layout" class="tsd-kind-icon">_layout</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Layout.html#_layoutBitOffsetTable" class="tsd-kind-icon">_layout<wbr>Bit<wbr>Offset<wbr>Table</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Layout.html#_table" class="tsd-kind-icon">_table</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Layout.html#_totalBitLength" class="tsd-kind-icon">_total<wbr>Bit<wbr>Length</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="Layout.html#_createLayoutBitOffsetTable" class="tsd-kind-icon">_create<wbr>Layout<wbr>Bit<wbr>Offset<wbr>Table</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Layout.html#decode" class="tsd-kind-icon">decode</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Layout.html#decodeElements" class="tsd-kind-icon">decode<wbr>Elements</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Layout.html#encode" class="tsd-kind-icon">encode</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Layout.html#getLayout" class="tsd-kind-icon">get<wbr>Layout</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Layout.html#getTotalBitLength" class="tsd-kind-icon">get<wbr>Total<wbr>Bit<wbr>Length</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="Layout.html#getPacketBits" class="tsd-kind-icon">get<wbr>Packet<wbr>Bits</a></li>
 							</ul>
 						</section>
@@ -124,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L62">index.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L71">index.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -151,32 +148,17 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_layout" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _layout</h3>
-					<div class="tsd-signature tsd-kind-icon">_layout<span class="tsd-signature-symbol">:</span> <a href="../modules.html#IPacketLayout" class="tsd-signature-type" data-tsd-kind="Type alias">IPacketLayout</a><span class="tsd-signature-symbol"> = null</span></div>
+					<a name="_table" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _table</h3>
+					<div class="tsd-signature tsd-kind-icon">_table<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ILayoutTableEntry</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L46">index.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L60">index.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Packet layout of the class</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_layoutBitOffsetTable" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _layout<wbr>Bit<wbr>Offset<wbr>Table</h3>
-					<div class="tsd-signature tsd-kind-icon">_layout<wbr>Bit<wbr>Offset<wbr>Table<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L51">index.ts:51</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Packet layout of the class</p>
+							<p>Internal packet layout of the class</p>
 						</div>
 					</div>
 				</section>
@@ -186,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">_total<wbr>Bit<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L56">index.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L65">index.ts:65</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -198,39 +180,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_createLayoutBitOffsetTable" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _create<wbr>Layout<wbr>Bit<wbr>Offset<wbr>Table</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_create<wbr>Layout<wbr>Bit<wbr>Offset<wbr>Table<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L140">index.ts:140</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Create a bit offset table to accelerate layout access times</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="decode" class="tsd-anchor"></a>
 					<h3>decode</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">decode<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, bits<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, bitStrideIndex<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">decode<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, bits<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, elementIndex<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L125">index.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L117">index.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -253,13 +213,50 @@
 									</div>
 								</li>
 								<li>
-									<h5>bitStrideIndex: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+									<h5>elementIndex: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Optional bit stride index to start decoding at</p>
+										<p>Optional element index to start decoding at</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="decodeElements" class="tsd-anchor"></a>
+					<h3>decode<wbr>Elements</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">decode<wbr>Elements<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, bits<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L135">index.ts:135</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Decodes the packet member elements of the provided packet data</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The member name to query by</p>
+									</div>
+								</li>
+								<li>
+									<h5>bits: <span class="tsd-signature-type">Uint8Array</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The packet bits to decode</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -273,12 +270,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L83">index.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L91">index.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Encodes the provided packet data</p>
+									<p>Encodes the provided packet data into</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -300,50 +297,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getLayout" class="tsd-anchor"></a>
-					<h3>get<wbr>Layout</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Layout<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules.html#IPacketLayout" class="tsd-signature-type" data-tsd-kind="Type alias">IPacketLayout</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L71">index.ts:71</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the layout</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../modules.html#IPacketLayout" class="tsd-signature-type" data-tsd-kind="Type alias">IPacketLayout</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getTotalBitLength" class="tsd-anchor"></a>
-					<h3>get<wbr>Total<wbr>Bit<wbr>Length</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Total<wbr>Bit<wbr>Length<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L76">index.ts:76</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the total bit length of the packet layout</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="getPacketBits" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Packet<wbr>Bits</h3>
@@ -354,7 +307,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/02c7e1c/src/index.ts#L157">index.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/maierfelix/bitpackr/blob/b4a106d/src/index.ts#L149">index.ts:149</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -373,7 +326,7 @@
 								<li>
 									<h5>bitStride: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 8</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Optional custom bit stride of the packet data to decode</p>
+										<p>Optional custom bit stride to use</p>
 									</div>
 								</li>
 							</ul>
@@ -402,28 +355,19 @@
 								<a href="Layout.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="Layout.html#_layout" class="tsd-kind-icon">_layout</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="Layout.html#_layoutBitOffsetTable" class="tsd-kind-icon">_layout<wbr>Bit<wbr>Offset<wbr>Table</a>
+								<a href="Layout.html#_table" class="tsd-kind-icon">_table</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="Layout.html#_totalBitLength" class="tsd-kind-icon">_total<wbr>Bit<wbr>Length</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="Layout.html#_createLayoutBitOffsetTable" class="tsd-kind-icon">_create<wbr>Layout<wbr>Bit<wbr>Offset<wbr>Table</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="Layout.html#decode" class="tsd-kind-icon">decode</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="Layout.html#decodeElements" class="tsd-kind-icon">decode<wbr>Elements</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="Layout.html#encode" class="tsd-kind-icon">encode</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Layout.html#getLayout" class="tsd-kind-icon">get<wbr>Layout</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Layout.html#getTotalBitLength" class="tsd-kind-icon">get<wbr>Total<wbr>Bit<wbr>Length</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="Layout.html#getPacketBits" class="tsd-kind-icon">get<wbr>Packet<wbr>Bits</a>
@@ -452,11 +396,10 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>

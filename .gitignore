@@ -76,4 +76,5 @@ typings/
 .fusebox/
 
 dist
+example
 package-lock.json

@@ -1,15 +1,29 @@
 import {bitsToNumber, numberToBits, bitsNToBits, bitsToBitsN} from "./utils";
 
 /**
- * Returns the total bit length of the provided layout
- * @param layout - The layout to process
+ * Represents a layout table entry
  */
-function getLayoutBitLength(layout: IPacketLayout): number {
-  let length = 0;
-  for (const member of layout) {
-    length += member.bitLength;
-  }
-  return length;
+interface ILayoutTableEntry {
+  /**
+   * The name of the layout member
+   */
+  name: string;
+  /**
+   * Calculated bit offset of a layout member
+   */
+  bitOffset: number;
+  /**
+   * Bit length of a layout member
+   */
+  bitLength: number;
+  /**
+   * Calculated bit range of a layout member
+   */
+  bitRange: number;
+  /**
+   * Element count of a layout member
+   */
+  elementCount: number;
 }
 
 /**
@@ -25,9 +39,9 @@ export interface IPacketLayoutMember {
    */
   bitLength: number;
   /**
-   * Optional element-wise bit stride of the packet member
+   * Optional element count
    */
-  bitStride?: number;
+  elementCount?: number;
 }
 
 /**
@@ -41,14 +55,9 @@ export type IPacketLayout = IPacketLayoutMember[];
 export class Layout {
 
   /**
-   * Packet layout of the class
+   * Internal packet layout of the class
    */
-  private _layout: IPacketLayout = null;
-
-  /**
-   * Packet layout of the class
-   */
-  private _layoutBitOffsetTable: Map<string, number> = null;
+  private _table: Map<string, ILayoutTableEntry> = null;
 
   /**
    * The total bit length of the packet layout
@@ -60,52 +69,35 @@ export class Layout {
    * @param layout - The packet layout to use
    */
   public constructor(layout: IPacketLayout) {
-    this._layout = layout;
-    this._totalBitLength = getLayoutBitLength(layout);
-    this._layoutBitOffsetTable = this._createLayoutBitOffsetTable();
+    const table = new Map<string, ILayoutTableEntry>();
+    let bitOffset = 0;
+    for (const member of layout) {
+      const name = member.name;
+      const bitLength = member.bitLength | 0;
+      const bitRange = ((2 ** bitLength) - 1);
+      const elementCount = (member.elementCount | 0) || 1;
+      table.set(name, {name, bitOffset, bitLength, bitRange, elementCount});
+      bitOffset += bitLength * elementCount;
+    }
+    this._table = table;
+    this._totalBitLength = bitOffset;
   }
 
   /**
-   * Returns the layout
-   */
-  public getLayout(): IPacketLayout {return this._layout;}
-
-  /**
-   * Returns the total bit length of the packet layout
-   */
-  public getTotalBitLength(): number {return this._totalBitLength;}
-
-  /**
-   * Encodes the provided packet data
+   * Encodes the provided packet data into
    * @param packet - The packet to encode
    * @param bitStride - Optional custom bit stride to use
    */
   public encode(packet: number[], bitStride: number = 8): Uint8Array {
-    const layout = this.getLayout();
-    const output = new Uint8Array(this.getTotalBitLength());
+    const output = new Uint8Array(this._totalBitLength);
 
     let elementOffset = 0;
     let bitOffset = 0;
     // Encode packet members
-    for (const {bitLength, bitStride} of layout) {
-      // Encode multi-element data
-      if (bitStride && bitStride > 0) {
-        const elementCount = Math.floor(bitLength / bitStride);
-        for (let ii = 0; ii < elementCount; ++ii) {
-          const data = packet[elementOffset];
-          //const bitRange = ((2 ** bitLength) - 1);
-          //if (data < 0 || data > bitRange) throw new Error(`Layout member '${name}' data bit overflow`);
-          const dataBits = numberToBits(data, bitStride).reverse();
-          output.set(dataBits, bitOffset);
-          bitOffset += bitStride;
-          elementOffset++;
-        }
-      }
-      // Encode single data
-      else {
-        const data = packet[elementOffset];
-        //const bitRange = ((2 ** bitLength) - 1);
-        //if (data < 0 || data > bitRange) throw new Error(`Layout member '${name}' data bit overflow`);
+    for (const [_, {bitLength, bitRange, elementCount}] of this._table) {
+      for (let ii = 0; ii < elementCount; ++ii) {
+        // Overflow if OOB
+        const data = packet[elementOffset] & bitRange;
         const dataBits = numberToBits(data, bitLength).reverse();
         output.set(dataBits, bitOffset);
         bitOffset += bitLength;
@@ -120,39 +112,39 @@ export class Layout {
    * Decodes the packet member of the provided packet data
    * @param name - The member name to query by
    * @param bits - The packet bits to decode
-   * @param bitStrideIndex - Optional bit stride index to start decoding at
+   * @param elementIndex - Optional element index to start decoding at
    */
-  public decode(name: string, bits: Uint8Array, bitStrideIndex: number = 0): number {
-    const {bitLength, bitStride} = this.getLayout().find(d => d.name === name);
-    const bitStrideOffset = bitStrideIndex * (bitStride | 0);
-    const bitOffset = this._layoutBitOffsetTable.get(name);
+  public decode(name: string, bits: Uint8Array, elementIndex: number = 0): number {
+    const {bitOffset, bitLength, bitRange, elementCount} = this._table.get(name);
+    // Validate element index
+    if (elementIndex >= elementCount) {
+      throw new RangeError(`Element index '${elementIndex}' out of maximum range '${elementCount}'`);
+    }
+    const bitStrideOffset = elementIndex * (bitLength | 0);
     // Decode packet member
     const number = bitsToNumber(bits.subarray(bitOffset + bitStrideOffset), bitLength);
-    const bitRange = ((2 ** (bitStride || bitLength)) - 1);
-    // Extra safety here, make sure that the data never goes out of range
-    const output = number & bitRange;
-    return output;
+    // Overflow if OOB
+    return number & bitRange;
   }
 
   /**
-   * Create a bit offset table to accelerate layout access times
+   * Decodes the packet member elements of the provided packet data
+   * @param name - The member name to query by
+   * @param bits - The packet bits to decode
    */
-  private _createLayoutBitOffsetTable(): Map<string, number> {
-    const layout = this.getLayout();
-    const table = new Map<string, number>();
-    let bitOffset = 0;
-    for (let ii = 0; ii < layout.length; ++ii) {
-      const {name, bitLength} = layout[ii];
-      table.set(name, bitOffset);
-      bitOffset += bitLength;
+  public decodeElements(name: string, bits: Uint8Array): number[] {
+    const {elementCount} = this._table.get(name);
+    const output: number[] = [];
+    for (let ii = 0; ii < elementCount; ++ii) {
+      output.push(this.decode(name, bits, ii));
     }
-    return table;
+    return output;
   }
 
   /**
    * Returns a bit representation of the provided data
    * @param data - The packet data to decode into bits
-   * @param bitStride - Optional custom bit stride of the packet data to decode
+   * @param bitStride - Optional custom bit stride to use
    */
   public static getPacketBits(data: Uint8Array, bitStride: number = 8): Uint8Array {
     const bits = bitsNToBits(data, bitStride);
