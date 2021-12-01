@@ -70,7 +70,7 @@ export class Layout {
    * @param layout - The packet layout to use
    * @param bitStride - Optional custom bit stride to use
    */
-  public constructor(layout: IPacketLayoutMember[], bitStride = DEFAULT_BIT_STRIDE) {
+  public constructor(layout: IPacketLayoutMember[], bitStride: number = DEFAULT_BIT_STRIDE) {
     const table = new Map<string, IPacketTableMember>();
     let bitOffset = 0;
     // Build internal layout table
@@ -181,6 +181,24 @@ export class Layout {
       return output;
     }
     return bitsToNumber(buffer.subarray((bitOffset | 0)), (bitLength | 0));
+  }
+
+  /**
+   * Encodes the provided bit buffer into a buffer
+   * @param buffer - The bit buffer to encode
+   * @param bitStride - Optional custom bit stride to use
+   */
+  public static encode(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
+    return bitsToBitsN(buffer, bitStride);
+  }
+
+  /**
+   * Decodes the provided buffer into a bit buffer
+   * @param buffer - The buffer to decode
+   * @param bitStride - Optional custom bit stride to use
+   */
+  public static decode(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
+    return bitsNToBits(buffer, bitStride);
   }
 
 }
