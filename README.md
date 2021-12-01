@@ -63,7 +63,7 @@ const outputDead = PacketLayout.decodeBits("dead", decoded);
 
 By default, this library encodes data into an `Uint8Array` with `8-bit` per item. Instead of `8-bit`, a custom bit stride can be used. This allows you to encode your data into destinations, where you have less than `8-bit` available per item.
 
-This library allows you to hide information within a transaction sum, where you only have `3-bit` available per digit:
+This allows you to hide information within a transaction sum, where you only have `3-bit` available per digit:
 
 ````ts
 import * as bitpackr from "bitpackr";
