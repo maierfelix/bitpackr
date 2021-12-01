@@ -164,13 +164,13 @@ export class Layout {
   }
 
   /**
-   * Manually decodes from the provided bit buffer
+   * Manually decodes the layout data
    * @param buffer - The bit buffer to decode from
    * @param bitOffset - The bit offset to start decoding at
    * @param bitLength - The bit length to decode with
    * @param elementCount - Optional element count to decode
    */
-  public static decodeBitsAt(buffer: Uint8Array, bitOffset: number, bitLength: number, elementCount: number = 0): PacketData {
+  public static decodeAt(buffer: Uint8Array, bitOffset: number, bitLength: number, elementCount: number = 0): PacketData {
     if (elementCount > 0) {
       const output: number[] = [];
       for (let ii = 0; ii < elementCount; ++ii) {
