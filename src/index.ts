@@ -108,21 +108,21 @@ export class Layout {
    * Encodes the provided bit buffer into a buffer
    * @param buffer - The bit buffer to encode
    */
-  public encode(buffer: Uint8Array): Uint8Array {return bitsToBitsN(buffer, this.getBitStride());}
+  public encodeLayout(buffer: Uint8Array): Uint8Array {return bitsToBitsN(buffer, this.getBitStride());}
 
   /**
    * Decodes the provided buffer into a bit buffer
    * @param buffer - The buffer to decode
    */
-  public decode(buffer: Uint8Array): Uint8Array {return bitsNToBits(buffer, this.getBitStride());}
+  public decodeLayout(buffer: Uint8Array): Uint8Array {return bitsNToBits(buffer, this.getBitStride());}
 
   /**
-   * Encodes the provided packet data
+   * Encodes the layout data
    * @param name - The name of the layout member to encode
    * @param data - The packet data to encode
    * @param buffer - The bit buffer to encode into
    */
-  public encodeBits(name: string, data: PacketData, buffer: Uint8Array): void {
+  public encode(name: string, data: PacketData, buffer: Uint8Array): void {
     const table = this._table.get(name);
     // Validate table member query
     if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
@@ -141,11 +141,11 @@ export class Layout {
   }
 
   /**
-   * Decodes the layout member from the provided bit buffer
+   * Decodes the layout data
    * @param name - The name of the layout member to decode
    * @param buffer - The bit buffer to decode from
    */
-  public decodeBits(name: string, buffer: Uint8Array): PacketData {
+  public decode(name: string, buffer: Uint8Array): PacketData {
     const table = this._table.get(name);
     // Validate table member query
     if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
@@ -188,7 +188,7 @@ export class Layout {
    * @param buffer - The bit buffer to encode
    * @param bitStride - Optional custom bit stride to use
    */
-  public static encode(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
+  public static encodeLayout(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
     return bitsToBitsN(buffer, bitStride);
   }
 
@@ -197,7 +197,7 @@ export class Layout {
    * @param buffer - The buffer to decode
    * @param bitStride - Optional custom bit stride to use
    */
-  public static decode(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
+  public static decodeLayout(buffer: Uint8Array, bitStride: number = DEFAULT_BIT_STRIDE): Uint8Array {
     return bitsNToBits(buffer, bitStride);
   }
 

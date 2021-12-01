@@ -42,21 +42,21 @@ const inputDead = 1;
 
 // Encode
 const encodeBuffer = new Uint8Array(PacketLayout.getBitLength());
-PacketLayout.encodeBits("id", inputId, encodeBuffer);
-PacketLayout.encodeBits("health", inputHealth, encodeBuffer);
-PacketLayout.encodeBits("color", inputColor, encodeBuffer);
-PacketLayout.encodeBits("dead", inputDead, encodeBuffer);
+PacketLayout.encode("id", inputId, encodeBuffer);
+PacketLayout.encode("health", inputHealth, encodeBuffer);
+PacketLayout.encode("color", inputColor, encodeBuffer);
+PacketLayout.encode("dead", inputDead, encodeBuffer);
 
 // Encode the data into a packet
-const packet = PacketLayout.encode(encodeBuffer);
+const packet = PacketLayout.encodeLayout(encodeBuffer);
 // Decode the packet
-const decoded = PacketLayout.decode(packet);
+const decoded = PacketLayout.decodeLayout(packet);
 
 // Output data
-const outputId = PacketLayout.decodeBits("id", decoded);
-const outputHealth = PacketLayout.decodeBits("health", decoded);
-const outputColor = PacketLayout.decodeBits("color", decoded);
-const outputDead = PacketLayout.decodeBits("dead", decoded);
+const outputId = PacketLayout.decode("id", decoded);
+const outputHealth = PacketLayout.decode("health", decoded);
+const outputColor = PacketLayout.decode("color", decoded);
+const outputDead = PacketLayout.decode("dead", decoded);
 ````
 
 ### Steganography:
@@ -76,13 +76,13 @@ const inputSecret = [11, 22, 33, 44];
 
 // Encode secret
 const encodeBuffer = new Uint8Array(PacketLayout.getBitLength());
-PacketLayout.encodeBits("secret", inputSecret, encodeBuffer);
+PacketLayout.encode("secret", inputSecret, encodeBuffer);
 
 // The transaction amount to send, which contains the secret data
-const encoded = "0.0" + PacketLayout.encode(encodeBuffer).join(""); // 0.031031201450
+const encoded = "0.0" + PacketLayout.encodeLayout(encodeBuffer).join(""); // 0.031031201450
 // Decode the transaction amount
-const decoded = PacketLayout.decode(encoded.split("").map(v => parseInt(v)).slice(3));
+const decoded = PacketLayout.decodeLayout(encoded.split("").map(v => parseInt(v)).slice(3));
 
 // Decode secret
-const outputSecret = PacketLayout.decodeBits("secret", decoded); // 11, 22, 33, 44
+const outputSecret = PacketLayout.decode("secret", decoded); // 11, 22, 33, 44
 ````
