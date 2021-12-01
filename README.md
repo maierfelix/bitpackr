@@ -27,67 +27,62 @@ This library doesn't validate encoded/decoded data. Instead of throwing errors t
 import * as bitpackr from "bitpackr";
 
 // Define data layout
-const PLAYER_PACKET = new bitpackr.Layout([
-  {name: "id",     bitLength: 4},
-  {name: "color",  bitLength: 8, elementCount: 4},
+const PacketLayout = new bitpackr.Layout([
+  {name: "id", bitLength: 4},
   {name: "health", bitLength: 8},
-  {name: "dead",   bitLength: 1},
+  {name: "color", bitLength: 8, elementCount: 4},
+  {name: "dead", bitLength: 1},
 ]);
 
-// The data to encode
-const input = [
-  // Packet id
-  15,
-  // Color
-  128, 0, 128, 255,
-  // Health
-  66,
-  // Dead
-  1
-];
+// Input data
+const inputId = 15;
+const inputHealth = 255;
+const inputColor = [128, 0, 192, 255];
+const inputDead = 1;
 
-// Encode data
-const encoded = PLAYER_PACKET.encode(input);
-// Decode data
-const decoded = bitpackr.Layout.getPacketBits(encoded);
+// Encode
+const encodeBuffer = new Uint8Array(PacketLayout.getBitLength());
+PacketLayout.encodeBits("id", inputId, encodeBuffer);
+PacketLayout.encodeBits("health", inputHealth, encodeBuffer);
+PacketLayout.encodeBits("color", inputColor, encodeBuffer);
+PacketLayout.encodeBits("dead", inputDead, encodeBuffer);
 
-// The decoded data
-const output = [
-  // Packet id
-  PLAYER_PACKET.decode("id", decoded),
-  // Color
-  PLAYER_PACKET.decode("color", decoded, 0),
-  PLAYER_PACKET.decode("color", decoded, 1),
-  PLAYER_PACKET.decode("color", decoded, 2),
-  PLAYER_PACKET.decode("color", decoded, 3),
-  // Health
-  PLAYER_PACKET.decode("health", decoded),
-  // Dead
-  PLAYER_PACKET.decode("dead", decoded),
-];
+// Encode the data into a packet
+const packet = PacketLayout.encode(encodeBuffer);
+// Decode the packet
+const decoded = PacketLayout.decode(packet);
+
+// Output data
+const outputId = PacketLayout.decodeBits("id", decoded);
+const outputHealth = PacketLayout.decodeBits("health", decoded);
+const outputColor = PacketLayout.decodeBits("color", decoded);
+const outputDead = PacketLayout.decodeBits("dead", decoded);
 ````
 
 ### Steganography:
 
 By default, this library encodes data into an `Uint8Array` with `8-bit` per item. Instead of `8-bit`, a custom bit stride can be used. This allows you to encode your data into destinations, where you have less than `8-bit` available per item.
 
-One scenario where you have only `3-bit` available are transaction sums. This library allows you to hide information within a transaction sum:
+This library allows you to hide information within a transaction sum, where you only have `3-bit` available per digit:
 
 ````ts
 import * as bitpackr from "bitpackr";
 
-const BITS_PER_DIGIT = 3;
+// Define data layout, use a 3-bit stride
+const PacketLayout = new bitpackr.Layout([{name: "secret", bitLength: 8, elementCount: 4}], 3);
 
-const SECRET_DATA = new bitpackr.Layout([
-  {name: "token", bitLength: 8, elementCount: 4},
-]);
+// The secret data that we want to hide
+const inputSecret = [11, 22, 33, 44];
 
-const input = [11, 22, 33, 44];
+// Encode secret
+const encodeBuffer = new Uint8Array(PacketLayout.getBitLength());
+PacketLayout.encodeBits("secret", inputSecret, encodeBuffer);
 
-// The transaction amount to send, which stores secret data
-const encoded = "0.0" + SECRET_DATA.encode(input, BITS_PER_DIGIT).join(""); // 0.031031201450
+// The transaction amount to send, which contains the secret data
+const encoded = "0.0" + PacketLayout.encode(encodeBuffer).join(""); // 0.031031201450
+// Decode the transaction amount
+const decoded = PacketLayout.decode(encoded.split("").map(v => parseInt(v)).slice(3));
 
-const decoded = bitpackr.Layout.getPacketBits(encoded.split("").map(v => parseInt(v)).slice(3), BITS_PER_DIGIT);
-
-const output = SECRET_DATA.decodeElements("token", decoded);
+// Decode secret
+const outputSecret = PacketLayout.decodeBits("secret", decoded); // 11, 22, 33, 44
 ````
