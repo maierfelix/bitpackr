@@ -118,7 +118,7 @@ export class Layout {
 
   /**
    * Encodes the provided packet data
-   * @param name - The name of the packet data member to encode
+   * @param name - The name of the layout member to encode
    * @param data - The packet data to encode
    * @param buffer - The bit buffer to encode into
    */
