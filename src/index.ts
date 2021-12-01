@@ -41,9 +41,24 @@ export interface IPacketLayoutMember {
 }
 
 /**
- * Type representing the allowed packet data
+ * Type representing the allowed packet input data
  */
-export type PacketData = (number | number[]);
+export type PacketInputData = (
+  number |
+  number[] |
+  Uint8Array |
+  Uint8ClampedArray |
+  Uint16Array |
+  Uint32Array
+);
+
+/**
+ * Type representing the packet output data
+ */
+export type PacketOutputData = (
+  number |
+  number[]
+);
 
 /**
  * Packet layout class
@@ -122,12 +137,12 @@ export class Layout {
    * @param data - The packet data to encode
    * @param buffer - The bit buffer to encode into
    */
-  public encode(name: string, data: PacketData, buffer: Uint8Array): void {
+  public encode(name: string, data: PacketInputData, buffer: Uint8Array): void {
     const table = this._table.get(name);
     // Validate table member query
     if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
     // Encode packet array data
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) || ArrayBuffer.isView(data)) {
       for (let ii = 0; ii < table.elementCount; ++ii) {
         const dataBits = numberToBits(data[ii] || 0, table.bitLength);
         buffer.set(dataBits, table.bitOffset + (ii * table.bitLength));
@@ -145,7 +160,7 @@ export class Layout {
    * @param name - The name of the layout member to decode
    * @param buffer - The bit buffer to decode from
    */
-  public decode(name: string, buffer: Uint8Array): PacketData {
+  public decode(name: string, buffer: Uint8Array): PacketOutputData {
     const table = this._table.get(name);
     // Validate table member query
     if (!table) throw new ReferenceError(`'${name}' is not a valid layout member`);
@@ -170,7 +185,7 @@ export class Layout {
    * @param bitLength - The bit length to decode with
    * @param elementCount - Optional element count to decode
    */
-  public static decodeAt(buffer: Uint8Array, bitOffset: number, bitLength: number, elementCount: number = 0): PacketData {
+  public static decodeAt(buffer: Uint8Array, bitOffset: number, bitLength: number, elementCount: number = 0): PacketOutputData {
     if (elementCount > 0) {
       const output: number[] = [];
       for (let ii = 0; ii < elementCount; ++ii) {
